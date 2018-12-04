@@ -3,7 +3,7 @@ package com.simpleblog.utils;
 import java.io.File;
 
 import com.jmtemplate.Template;
-import com.simpleblog.Config;
+import com.simpleblog.ServletConfig;
 
 public enum TemplateLoader {
 	
@@ -18,14 +18,14 @@ public enum TemplateLoader {
 	
 	private File getTemplateRoot() {
 		if (templateRoot == null) {
-			templateRoot = new File(Config.DIR_TEMPLATES.toString());
+			templateRoot = new File(ServletConfig.DIR_TEMPLATES.toString());
 		}
 		return templateRoot;
 	}
 	
 	private Boolean getReload() {
 		if (reload == null) {
-			reload = Boolean.parseBoolean(Config.TEMPLATES_RELOAD.toString());
+			reload = Boolean.parseBoolean(ServletConfig.TEMPLATES_RELOAD.toString());
 		}
 		return reload;
 	}

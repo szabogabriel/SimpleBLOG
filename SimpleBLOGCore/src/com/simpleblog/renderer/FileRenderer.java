@@ -4,6 +4,6 @@ import com.simpleblog.entries.Entry;
 
 public interface FileRenderer {
 	
-	String render(Entry entry);
+	RenderedData render(Entry entry);
 
 }

@@ -4,11 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
-public enum Config {
-	
-	COMMAND_PERL("command.perl", "perl"),
-	DIR_ENTRIES("dir.entries", "/entries"),
-	DIR_TOOLS("dir.tools", "/tools"),
+public enum ServletConfig {
+
 	DIR_TEMPLATES("dir.templates", "/templates"),
 	TEMPLATES_RELOAD("templates.reload", "true"),
 	;
@@ -30,8 +27,6 @@ public enum Config {
 				e.printStackTrace();
 			}
 			
-			PROPS.put(DIR_ENTRIES.KEY, wd + DIR_ENTRIES.DEFAULT);
-			PROPS.put(DIR_TOOLS.KEY, wd + DIR_TOOLS.DEFAULT);
 			PROPS.put(DIR_TEMPLATES.KEY, wd + DIR_TEMPLATES.DEFAULT);
 		}
 	}
@@ -39,7 +34,7 @@ public enum Config {
 	private final String KEY;
 	private final String DEFAULT;
 	
-	private Config(String key, String defaultvalue) {
+	private ServletConfig(String key, String defaultvalue) {
 		this.KEY = key;
 		this.DEFAULT = defaultvalue;
 	}
@@ -48,5 +43,5 @@ public enum Config {
 	public String toString() { 
 		return PROPS.getProperty(KEY, DEFAULT);
 	}
-
+	
 }

@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.simpleblog.Config;
+import com.simpleblog.CoreConfig;
 import com.simpleblog.entries.Entry;
 
 public class MarkdownRenderer implements FileRenderer {
@@ -13,7 +13,7 @@ public class MarkdownRenderer implements FileRenderer {
 	private final String COMMAND_PERL ;
 	
 	public MarkdownRenderer() {
-		this(new File(Config.DIR_TOOLS.toString() + "/Markdown.pl"), Config.COMMAND_PERL.toString());
+		this(new File(CoreConfig.DIR_TOOLS.toString() + "/Markdown.pl"), CoreConfig.COMMAND_PERL.toString());
 	}
 	
 	public MarkdownRenderer(File markdownFile, String commandPerl) {
@@ -22,7 +22,7 @@ public class MarkdownRenderer implements FileRenderer {
 	}
 
 	@Override
-	public String render(Entry entry) {
+	public RenderedData render(Entry entry) {
 		StringBuilder command = new StringBuilder();
 		command
 			.append(COMMAND_PERL)
@@ -50,7 +50,9 @@ public class MarkdownRenderer implements FileRenderer {
 			e.printStackTrace();
 		}
 		
-		return ret.toString();
+		System.out.println(ret.toString());
+		
+		return new RenderedData(ret.toString().getBytes(), "text/html");
 	}
 
 }

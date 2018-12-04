@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jmtemplate.Template;
 import com.simpleblog.Main;
+import com.simpleblog.renderer.RenderedData;
 import com.simpleblog.utils.QueryString;
 import com.simpleblog.utils.TemplateLoader;
 
@@ -32,10 +33,21 @@ public class Page extends HttpServlet {
 		Map<String, Object> data = new HashMap<>();
 		QueryString qs = new QueryString(request.getQueryString());
 		
-		String content = getRenderedEntry(qs);
-		if (content.length() > 0) {
-			data.put("content", content);
+		data.put("entries", getMenuEntries(qs));
+		
+		boolean useTemplate = false;
+		
+		RenderedData renderData = getRenderedEntry(qs);
+		byte[] content = renderData.getData();
+		if (content.length > 0) {
+			useTemplate = renderData.getMimeType() != null && renderData.getMimeType().startsWith("text");
+			if (useTemplate) {
+				data.put("content", new String(content));
+			} else {
+				data.put("content", content);
+			}
 		} else {
+			useTemplate = true;
 			if (qs.containsKey("category")) {
 				data.put("entriesList", getAvailableEntries(qs));
 				data.put("currentCategory", qs.getValue("category"));
@@ -45,9 +57,13 @@ public class Page extends HttpServlet {
 			}
 		}
 		
-		data.put("entries", getMenuEntries(qs));
-		
-		response.getWriter().append(TEMPLATE.render(data));
+		if (useTemplate) {
+			response.setContentType("text/html");
+			response.getWriter().append(TEMPLATE.render(data));
+		} else {
+			response.setContentType(renderData.getMimeType());
+			response.getOutputStream().write(content);
+		}
 	}
 	
 	private List<Map<String, Object>> getMenuEntries(QueryString qs) {
@@ -80,8 +96,8 @@ public class Page extends HttpServlet {
 		return ret;
 	}
 	
-	private String getRenderedEntry(QueryString qs) {
-		String ret = "";
+	private RenderedData getRenderedEntry(QueryString qs) {
+		RenderedData ret = new RenderedData(new byte [] {}, "text/html");
 		if (qs.containsKey("category") && qs.containsKey("name")) {
 			ret = Main.INSTANCE.getRenderedEntry(qs.getValue("category"), qs.getValue("name"));
 		}

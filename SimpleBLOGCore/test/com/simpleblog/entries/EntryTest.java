@@ -16,13 +16,13 @@ public class EntryTest {
 	@Test
 	public void loadEntry() {
 		assertEquals(testEntry.getFile().exists(), true);
-		assertEquals(testEntry.getType(), Entry.Types.MD);
+		assertEquals(testEntry.getType(), EntryTypes.MD);
 	}
 	
 	@Test
 	public void render() {
 		MarkdownRenderer mdr = new MarkdownRenderer(new File("./resources/tools/Markdown.pl"), "perl");
-		String file = mdr.render(testEntry);
+		String file = new String(mdr.render(testEntry).getData());
 		System.out.println(file);
 		assertTrue(file.startsWith("<h1>"));
 		assertTrue(file.trim().endsWith("</p>"));

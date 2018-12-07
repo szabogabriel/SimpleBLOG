@@ -1,4 +1,4 @@
-package com.simpleblog.servlet;
+package com.simpleblog.web;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,31 +7,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.jmtemplate.Template;
 import com.simpleblog.Main;
 import com.simpleblog.renderer.RenderedData;
 import com.simpleblog.utils.QueryString;
 import com.simpleblog.utils.TemplateLoader;
 
-@WebServlet("/page")
-public class Page extends HttpServlet {
-	private static final long serialVersionUID = -2218888967722431724L;
-	
+public class Page {
 	private static final Template TEMPLATE = TemplateLoader.INSTANCE.load("page.template");
 
     public Page() {
         super();
     }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doGet(String queryString, Response response) throws IOException {
 		Map<String, Object> data = new HashMap<>();
-		QueryString qs = new QueryString(request.getQueryString());
+		QueryString qs = new QueryString(queryString);
 		
 		data.put("entries", getMenuEntries(qs));
 		
@@ -59,7 +50,7 @@ public class Page extends HttpServlet {
 		
 		if (useTemplate) {
 			response.setContentType("text/html");
-			response.getWriter().append(TEMPLATE.render(data));
+			response.getOutputStream().write(TEMPLATE.render(data).getBytes());
 		} else {
 			response.setContentType(renderData.getMimeType());
 			response.getOutputStream().write(content);

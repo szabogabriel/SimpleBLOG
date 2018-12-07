@@ -1,0 +1,54 @@
+<project name="SimpleBLOGWeb" basedir="." default="all">
+	<property name="dir.src.dev" value="${basedir}/src"/>
+	<property name="dir.src.test" value="${basedir}/test"/>
+	<property name="dir.bin" value="${basedir}/bin"/>
+	<property name="dir.lib" value="${basedir}/lib"/>
+	
+	<property name="file.jar" value="${basedir}/SimpleBLOGWeb_0.1.jar"/>
+	
+	<target name="all">
+		<antcall target="clean"/>
+		<antcall target="build_dev"/>
+		<antcall target="package"/>
+	</target>
+	
+	<target name="all_test">
+		<antcall target="clean"/>
+		<antcall target="build_test"/>
+		<antcall target="package"/>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${dir.bin}" includes="**/*" quiet="true"/>
+		<mkdir dir="${dir.bin}"/>
+		<delete file="${file.jar}" quiet="true"/>
+	</target>
+		
+	<target name="build_dev">
+		<javac srcdir="${dir.src.dev}" destdir="${dir.bin}">
+			<classpath>
+				<fileset dir="${dir.lib}">
+					<include name="**/*"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="build_test">
+		<javac srcdir="${dir.src.dev}" destdir="${dir.bin}">
+			<src>
+				<fileset dir="${dir.src.dev}" includes="**/*"/>
+				<fileset dir="${dir.src.test}" includes="**/*"/>
+			</src>
+			<classpath>
+				<fileset dir="${dir.lib}">
+					<include name="**/*"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="package">
+		<jar destfile="${file.jar}" basedir="${dir.bin}"/>
+	</target>
+</project>

@@ -14,6 +14,7 @@ public enum EntryTypes {
 			".pptx", ".potx", ".ppsx", ".ppam", ".pptm", ".potm", ".ppsm",
 			".mdb"
 			}),
+	PDF(new String [] {".pdf"}),
 	UNKNOWN(new String[] {""});
 	;
 	

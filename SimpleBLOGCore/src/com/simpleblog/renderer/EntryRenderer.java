@@ -14,6 +14,7 @@ public class EntryRenderer {
 		RENDERERS.put(EntryTypes.UNKNOWN, new UnknownRenderer());
 		RENDERERS.put(EntryTypes.MD, new MarkdownRenderer());
 		RENDERERS.put(EntryTypes.OFFICE, new MSOfficeRenderer());
+		RENDERERS.put(EntryTypes.PDF, new PDFRenderer());
 	}
 	
 	public RenderedData render(Entry entry) {

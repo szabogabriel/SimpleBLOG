@@ -1,7 +1,9 @@
 package com.simpleblog.entries;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public enum EntryTypes {
@@ -18,18 +20,28 @@ public enum EntryTypes {
 	UNKNOWN(new String[] {""});
 	;
 	
+	private final static Map<String, EntryTypes> MAPPING = new HashMap<>();
+	
 	private final Set<String> POSTFIX = new HashSet<>(); 
 	private EntryTypes(String[] postfix) {
 		POSTFIX.addAll(Arrays.asList(postfix));
 	}
 	
 	static EntryTypes getType(String filename) {
-		for (EntryTypes it : values()) {
-			if (it.POSTFIX.contains(extension(filename))) {
-				return it;
+		String extension = extension(filename).toLowerCase();
+		EntryTypes ret = EntryTypes.UNKNOWN;
+		
+		if (MAPPING.containsKey(extension)) {
+			ret = MAPPING.get(extension);
+		} else {
+			for (EntryTypes it : values()) {
+				if (it.POSTFIX.contains(extension)) {
+					ret = it;
+				}
 			}
+			MAPPING.put(extension, ret);
 		}
-		return EntryTypes.UNKNOWN;
+		return ret;
 	}
 	
 	private static String extension(String filename) {

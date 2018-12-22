@@ -11,10 +11,12 @@ public class EntryRenderer {
 	private final Map<EntryTypes, FileRenderer> RENDERERS = new HashMap<>();
 	
 	public EntryRenderer() {
-		RENDERERS.put(EntryTypes.UNKNOWN, new UnknownRenderer());
+		RENDERERS.put(EntryTypes.HTML, new HtmlRenderer());
+		RENDERERS.put(EntryTypes.IMAGE, new ImageRenderer());
 		RENDERERS.put(EntryTypes.MD, new MarkdownRenderer());
 		RENDERERS.put(EntryTypes.OFFICE, new MSOfficeRenderer());
 		RENDERERS.put(EntryTypes.PDF, new PDFRenderer());
+		RENDERERS.put(EntryTypes.UNKNOWN, new UnknownRenderer());
 	}
 	
 	public RenderedData render(Entry entry) {

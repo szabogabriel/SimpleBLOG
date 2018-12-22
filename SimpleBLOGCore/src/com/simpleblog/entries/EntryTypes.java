@@ -7,7 +7,9 @@ import java.util.Map;
 import java.util.Set;
 
 public enum EntryTypes {
-	
+
+	HTML(new String[] {".htm", ".html"}),
+	IMAGE(new String[] { "jpg", "jpeg", "gif", "tiff", "bmp"}),
 	MD(new String[] {".md"}),
 	OFFICE(new String[] {
 			".doc", ".dot", ".docx", ".dotx", ".docm", ".dotm", 

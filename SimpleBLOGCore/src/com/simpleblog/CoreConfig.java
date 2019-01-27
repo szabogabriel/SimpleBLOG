@@ -9,6 +9,7 @@ public enum CoreConfig {
 	COMMAND_PERL("command.perl", "perl"),
 	DIR_ENTRIES("dir.entries", "/entries"),
 	DIR_TOOLS("dir.tools", "/tools"),
+	DIR_LOGS("dir.logs", "/logs"),
 	;
 	
 	private static final Properties PROPS = new Properties();
@@ -30,6 +31,7 @@ public enum CoreConfig {
 			
 			PROPS.put(DIR_ENTRIES.KEY, wd + DIR_ENTRIES.DEFAULT);
 			PROPS.put(DIR_TOOLS.KEY, wd + DIR_TOOLS.DEFAULT);
+			PROPS.put(DIR_LOGS.KEY, wd + DIR_LOGS.DEFAULT);
 		}
 	}
 	

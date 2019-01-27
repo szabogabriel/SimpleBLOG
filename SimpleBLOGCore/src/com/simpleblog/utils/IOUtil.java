@@ -3,6 +3,8 @@ package com.simpleblog.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 
 public class IOUtil {
@@ -30,6 +32,14 @@ public class IOUtil {
 			}
 		}
 		return ret;
+	}
+	
+	public static void append(File targetFile, String message) {
+		try (FileWriter out = new FileWriter(targetFile, true)){
+			out.write(message);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -1,0 +1,72 @@
+<project name="SimpleBLOGServlet" basedir="." default="all">
+	<property name="dir.src.dev" value="${basedir}/src" />
+	<property name="dir.bin" value="${basedir}/build/classes" />
+	<property name="dir.webcontent" value="${basedir}/WebContent" />
+	<property name="dir.lib" value="${dir.webcontent}/WEB-INF/lib" />
+	<property name="dir.tomcat" value="C://Dev//Java//Servers//apache-tomcat-7.0.92" />
+
+	<property name="name.product" value="SimpleBLOG"/>
+	
+	<property name="file.war" value="${basedir}/${name.product}.war" />
+	
+	<condition property="performPublish" value="true">
+		<available file="${dir.tomcat}//bin//catalina.bat"/>
+	</condition>
+
+	<macrodef name="tomcat">
+		<attribute name="operation"/>
+		<sequential>
+			<exec executable="cmd" dir="${dir.tomcat}//bin">
+				<arg value="/c" />
+				<arg value="catalina.bat" />
+				<arg value="@{operation}" />
+				<env key="SIMPLEBLOG_HOME" value="${dir.tomcat}//workingDir"/>
+			</exec>
+		</sequential>
+	</macrodef>
+	
+	<target name="all">
+		<antcall target="clean" />
+		<antcall target="build_dev" />
+		<antcall target="package" />
+		<antcall target="publish" />
+	</target>
+
+	<target name="clean">
+		<delete file="${file.war}" quiet="true" />
+	</target>
+
+	<target name="build_dev">
+		<javac srcdir="${dir.src.dev}" destdir="${dir.bin}">
+			<classpath>
+				<fileset dir="${dir.lib}" includes="*.jar" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="package">
+		<war destfile="${file.war}" needxmlfile="false" compress="false">
+			<fileset dir="${dir.webcontent}" />
+			<lib dir="${dir.lib}" />
+			<classes dir="${dir.bin}" />
+		</war>
+		<echo message="${TOMCAT_DIR}" />
+	</target>
+
+	<target name="publish" if="performPublish">
+		<tomcat operation="stop"/>
+		
+		<delete dir="${dir.tomcat}//webapps//${name.product}" quiet="true"/>
+		<delete dir="${dir.tomcat}//workingDir" quiet="true"/>
+		
+		<mkdir dir="${dir.tomcat}//workingDir"/>
+		
+		<copy todir="${dir.tomcat}//webapps" file="${file.war}" />
+		<copy todir="${dir.tomcat}//workingDir">
+			<fileset dir="${basedir}//resources" includes="**/*"/>
+		</copy>
+		
+		<tomcat operation="start"/>
+	</target>
+
+</project>

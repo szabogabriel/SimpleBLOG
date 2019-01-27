@@ -19,8 +19,6 @@
 	</target>
 	
 	<target name="clean">
-		<delete dir="${dir.bin}" includes="**/*" quiet="true"/>
-		<mkdir dir="${dir.bin}"/>
 		<delete file="${file.jar}" quiet="true"/>
 	</target>
 		
@@ -40,7 +38,7 @@
 	</target>
 	
 	<target name="publish">
-		<copy file="${file.jar}" todir="${basedir}/../SimpleBLOGServlet/WebContent/WEB-INF/lib"/>
+		<copy file="${file.jar}" todir="${basedir}/../SimpleBLOG/WebContent/WEB-INF/lib"/>
 		<eclipse.refreshLocal resource="SimpleBLOGServlet/WebContent/WEB-INF/lib" depth="infinite" />
 		
 		<copy file="${file.jar}" todir="${basedir}/../SimpleBLOGWeb/lib"/>

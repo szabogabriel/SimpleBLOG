@@ -1,0 +1,23 @@
+{{>html_start.template}}
+
+{{>html_menu.template}}
+      <h1>Add category</h1>
+      <form action="" method="post">
+        <input type="hidden" name="operation" value="addCategory"></input>
+        <input type="text"  name="username"></input>
+        <input type="password" name="password"></input>
+        <input type="text" name="category"></input>
+        <input type="submit" value="Submit"/>
+      </form>
+      {{{content}}}
+      
+      {{#showEntriesList}}
+        {{#entriesList}}<p><a href="page?category={{currentCategory}}&name={{entryFile}}">{{entryFileHR}}</p>
+        {{/entriesList}}
+      {{/showEntriesList}}
+      
+      {{#showIndex}}
+        {{>index.template}}
+      {{/showIndex}}
+
+{{>html_stop.template}}

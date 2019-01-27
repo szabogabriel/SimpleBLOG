@@ -51,4 +51,9 @@
 	<target name="package">
 		<jar destfile="${file.jar}" basedir="${dir.bin}"/>
 	</target>
+	
+	<target name="publish">
+		<copy file="${file.jar}" todir="${basedir}/../SimpleBLOGServlet/WebContent/WEB-INF/lib"/>
+		<eclipse.refreshLocal resource="SimpleBLOGServlet/WebContent/WEB-INF/lib" depth="infinite" />
+	</target>
 </project>

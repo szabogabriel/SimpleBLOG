@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
-public enum ServletConfig {
+public enum WebConfig {
 
 	DIR_TEMPLATES("dir.templates", "/templates"),
 	TEMPLATES_RELOAD("templates.reload", "true"),
@@ -34,7 +34,7 @@ public enum ServletConfig {
 	private final String KEY;
 	private final String DEFAULT;
 	
-	private ServletConfig(String key, String defaultvalue) {
+	private WebConfig(String key, String defaultvalue) {
 		this.KEY = key;
 		this.DEFAULT = defaultvalue;
 	}

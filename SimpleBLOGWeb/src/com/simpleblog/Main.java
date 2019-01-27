@@ -3,7 +3,7 @@ package com.simpleblog;
 import java.io.File;
 import java.util.Arrays;
 
-import com.simpleblog.entries.EntriesLoader;
+import com.simpleblog.entries.EntriesManager;
 import com.simpleblog.entries.Entry;
 import com.simpleblog.renderer.EntryRenderer;
 import com.simpleblog.renderer.RenderedData;
@@ -12,15 +12,15 @@ public class Main {
 	
 	public static final Main INSTANCE = new Main();
 	
-	private EntriesLoader entriesLoader;
+	private EntriesManager entriesLoader;
 	private EntryRenderer entriesRenderer;
 	
 	private Main() {
-		entriesLoader = new EntriesLoader(new File(CoreConfig.DIR_ENTRIES.toString()));
+		entriesLoader = new EntriesManager(new File(CoreConfig.DIR_ENTRIES.toString()));
 		entriesRenderer = new EntryRenderer();
 	}
 	
-	public EntriesLoader getEntriesLoader() {
+	public EntriesManager getEntriesManager() {
 		return entriesLoader;
 	}
 	

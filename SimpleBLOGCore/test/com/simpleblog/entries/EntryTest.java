@@ -30,7 +30,7 @@ public class EntryTest {
 	
 	@Test
 	public void entriesLoaderTest() {
-		EntriesLoader el = new EntriesLoader(new File("./resources/entries"));
+		EntriesManager el = new EntriesManager(new File("./resources/entries"));
 		String[] categories = el.getEntryCategories();
 		assertEquals(categories.length, 1);
 		assertEquals(categories[0], "Bash");

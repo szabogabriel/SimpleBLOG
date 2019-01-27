@@ -19,7 +19,7 @@ public class Entry {
 	}
 
 	public String getContent() {
-		return IOUtil.readFile(ENTRY_FILE);
+		return IOUtil.readFileString(ENTRY_FILE);
 	}
 	
 	public EntryTypes getType() {

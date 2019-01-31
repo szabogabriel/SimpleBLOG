@@ -10,6 +10,7 @@ public enum CoreConfig {
 	DIR_ENTRIES("dir.entries", "/entries"),
 	DIR_TOOLS("dir.tools", "/tools"),
 	DIR_LOGS("dir.logs", "/logs"),
+	DIR_USERS("dir.users", "/users"),
 	;
 	
 	private static final Properties PROPS = new Properties();
@@ -32,6 +33,7 @@ public enum CoreConfig {
 			PROPS.put(DIR_ENTRIES.KEY, wd + DIR_ENTRIES.DEFAULT);
 			PROPS.put(DIR_TOOLS.KEY, wd + DIR_TOOLS.DEFAULT);
 			PROPS.put(DIR_LOGS.KEY, wd + DIR_LOGS.DEFAULT);
+			PROPS.put(DIR_USERS.KEY, wd + DIR_USERS.DEFAULT);
 		}
 	}
 	

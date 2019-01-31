@@ -26,7 +26,10 @@ public class Upload extends PageBase {
 	}
 	
 	public void doPost(UploadRequest request, Response response) {
-		
+		if (!Main.INSTANCE.getEntriesManager().isKnownCategory(request.getCategory())) {
+			Main.INSTANCE.getEntriesManager().createCategory(request.getCategory());
+		}
+		Main.INSTANCE.getEntriesManager().createEntry(request.getCategory(), request.getFileName(), request.getFile());
 	}
 	
 	public void addCategory(String category, Response response) throws IOException {

@@ -8,12 +8,14 @@ public class UploadRequest {
 	private final String PASSWORD;
 	private final String CATEGORY;
 	private final File FILE;
+	private final String FILE_NAME;
 	
-	public UploadRequest(String uname, String psswd, String selectedCategory, File targetFile) {
+	public UploadRequest(String uname, String psswd, String selectedCategory, File targetFile, String fileName) {
 		this.USERNAME = uname;
 		this.PASSWORD = psswd;
 		this.CATEGORY = selectedCategory;
 		this.FILE = targetFile;
+		this.FILE_NAME = fileName;
 	}
 	
 	public String getUsername() {
@@ -30,6 +32,10 @@ public class UploadRequest {
 	
 	public File getFile() {
 		return FILE;
+	}
+	
+	public String getFileName() {
+		return FILE_NAME;
 	}
 	
 }

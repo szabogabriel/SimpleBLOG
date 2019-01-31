@@ -21,7 +21,7 @@ public class EntriesManager {
 	}
 	
 	public void createEntry(String category, String entryName, byte [] entry) {
-		File targetFile = new File(ROOT_FOLDER.getAbsoluteFile() + "/" + category + "/" + entryName);
+		File targetFile = getTargetFile(category, entryName);
 		if (!targetFile.exists()) {
 			try {
 				Files.write(targetFile.toPath(), entry);
@@ -29,6 +29,25 @@ public class EntriesManager {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void createEntry(String category, String entryName, File entry) {
+		if (entry.exists() && entry.isFile()) {
+			File targetFile = getTargetFile(category, entryName);
+			try {
+				Files.move(entry.toPath(), targetFile.toPath());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private File getTargetFile(String category, String entryName) {
+		return new File(ROOT_FOLDER.getAbsoluteFile() + "/" + category + "/" + entryName);
+	}
+	
+	public boolean isKnownCategory(String category) {
+		return Arrays.asList(getEntryCategories()).stream().filter(e -> e.equals(category)).count() > 0;
 	}
 	
 	public String[] getEntryCategories() {

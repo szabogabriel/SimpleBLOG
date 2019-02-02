@@ -1,0 +1,5 @@
+<project name="SimpleBLOGLibs" basedir=".">
+	
+	<import file="../SimpleBLOGBuild/build_generic.xml"/>
+	
+</project>

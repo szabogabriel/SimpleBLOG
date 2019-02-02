@@ -1,0 +1,42 @@
+<project name="SimpleBLOGBuild" basedir="." default="info">
+	
+	<property file="build.properties"/>
+	<property file="projects.properties"/>
+	
+	<target name="info">
+	</target>
+
+	<target name="SimpleBLOGCore">
+		<ant antfile="${project.dir.SimpleBLOGCore}/build.xml" target="all" dir="${project.dir.SimpleBLOGCore}"/>
+	</target>
+	
+	<target name="SimpleBLOGMiniHttpServer" depends="SimpleBLOGCore,SimpleBLOGWeb,jMustache,CommonsIo,CommonsFileupload">
+		<ant antfile="${project.dir.SimpleBLOGMiniHttpServer}/build.xml" target="all" dir="${project.dir.SimpleBLOGMiniHttpServer}"/>
+	</target>
+	
+	<target name="SimpleBLOGServlet" depends="SimpleBLOGCore,SimpleBLOGWeb,jMustache">
+		<ant antfile="${project.dir.SimpleBLOGServlet}/build.xml" target="all" dir="${project.dir.SimpleBLOGServlet}"/>
+	</target>
+	
+	<target name="SimpleBLOGWeb" depends="SimpleBLOGCore,jMustache">
+		<ant antfile="${project.dir.SimpleBLOGWeb}/build.xml" target="all" dir="${project.dir.SimpleBLOGWeb}"/>
+	</target>
+	
+	<target name="jMustache">
+		<ant antfile="${project.dir.SimpleBLOGLibs}/build.xml" target="manageLibrary">
+			<property name="libname" value="jMustache"/>
+		</ant>
+	</target>
+	
+	<target name="CommonsIo">
+		<ant antfile="${project.dir.SimpleBLOGLibs}/build.xml" target="manageLibrary">
+			<property name="libname" value="CommonsIo"/>
+		</ant>
+	</target>
+	
+	<target name="CommonsFileupload">
+		<ant antfile="${project.dir.SimpleBLOGLibs}/build.xml" target="manageLibrary">
+			<property name="libname" value="CommonsFileupload"/>
+		</ant>
+	</target>
+</project>

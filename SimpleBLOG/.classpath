@@ -12,5 +12,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SimpleBLOGCore"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SimpleBLOGWeb"/>
+	<classpathentry kind="lib" path="/SimpleBLOGLibs/jmtemplate.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

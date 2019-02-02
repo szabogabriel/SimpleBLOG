@@ -4,8 +4,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SimpleBLOGCore"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SimpleBLOGWeb"/>
-	<classpathentry kind="lib" path="lib/commons-fileupload-1.4.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-2.6.jar"/>
-	<classpathentry kind="lib" path="lib/jmtemplate.jar"/>
+	<classpathentry kind="lib" path="/SimpleBLOGLibs/commons-fileupload-1.4.jar"/>
+	<classpathentry kind="lib" path="/SimpleBLOGLibs/commons-io-2.6.jar"/>
+	<classpathentry kind="lib" path="/SimpleBLOGLibs/jmtemplate.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

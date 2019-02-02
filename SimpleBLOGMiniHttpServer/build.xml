@@ -1,0 +1,11 @@
+<project name="SimpleBLOGMiniHttpServer" basedir="." default="start">
+	
+	<import file="../SimpleBLOGBuild/build_generic.xml" />
+	
+	<property name="project.name" value="${project.name.SimpleBLOGMiniHttpServer}"/>
+	
+	<target name="start">
+		<ant antfile="../SimpleBLOGBuild/dependencies.xml" target="SimpleBLOGMiniHttpServer" inheritall="false"/>
+	</target>
+	
+</project>

@@ -1,47 +1,11 @@
-<project name="SimpleBLOGCore" basedir="." default="all">
-	<property name="dir.src.dev" value="${basedir}/src"/>
-	<property name="dir.src.test" value="${basedir}/test"/>
-	<property name="dir.bin" value="${basedir}/bin"/>
+<project name="SimpleBLOGCore" basedir="." default="start">
 	
-	<property name="file.jar" value="${basedir}/SimpleBLOGCore_0.1.jar"/>
+	<import file="../SimpleBLOGBuild/build_generic.xml" />
 	
-	<target name="all">
-		<antcall target="clean"/>
-		<antcall target="build_dev"/>
-		<antcall target="package"/>
-		<antcall target="publish"/>
+	<property name="project.name" value="${project.name.SimpleBLOGCore}"/>
+	
+	<target name="start">
+		<ant antfile="../SimpleBLOGBuild/dependencies.xml" target="SimpleBLOGCore" inheritall="false"/>
 	</target>
 	
-	<target name="all_test">
-		<antcall target="clean"/>
-		<antcall target="build_test"/>
-		<antcall target="package"/>
-	</target>
-	
-	<target name="clean">
-		<delete file="${file.jar}" quiet="true"/>
-	</target>
-		
-	<target name="build_dev">
-		<javac srcdir="${dir.src.dev}" destdir="${dir.bin}"/>
-	</target>
-	
-	<target name="build_test">
-		<javac destdir="${dir.bin}">
-			<src path="${dir.src.dev}"/>
-			<src path="${dir.src.test}"/>
-		</javac>
-	</target>
-	
-	<target name="package">
-		<jar destfile="${file.jar}" basedir="${dir.bin}"/>
-	</target>
-	
-	<target name="publish">
-		<copy file="${file.jar}" todir="${basedir}/../SimpleBLOG/WebContent/WEB-INF/lib"/>
-		<eclipse.refreshLocal resource="SimpleBLOGServlet/WebContent/WEB-INF/lib" depth="infinite" />
-		
-		<copy file="${file.jar}" todir="${basedir}/../SimpleBLOGWeb/lib"/>
-		<eclipse.refreshLocal resource="SimpleBLOGWeb/lib" depth="infinite" />
-	</target>
 </project>

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.jmtemplate.Template;
 import com.simpleblog.Main;
+import com.simpleblog.utils.QueryString;
 import com.simpleblog.utils.TemplateLoader;
 
 public class Upload extends PageBase {
@@ -49,6 +50,7 @@ public class Upload extends PageBase {
 	public void doGet(Response response, Message message) throws IOException {
 		Map<String, Object> data = new HashMap<>();
 		
+		data.put("entries", getMenuEntries(new QueryString("")));
 		data.put("existingCategories", getCategoriesData());
 		
 		if (message.type != MessageType.NONE) {
@@ -63,13 +65,27 @@ public class Upload extends PageBase {
 	public void doPost(UploadRequest request, Response response) throws IOException {
 		Message message = new Message("Ooops!", "The file couldn't be uploaded.", MessageType.ERROR);
 		
-		if (isUserCorrect(request.getUsername(), request.getPassword())) {
-			checkCategory(request.getCategory());
-			Main.INSTANCE.getEntriesManager().createEntry(request.getCategory(), request.getFileName(), request.getFile());
-			message = new Message("Success!", "The file " + request.getFileName() + "was uploaded successfully.", MessageType.SUCCESS);
+		try {
+			if (isRequestOk(request) && isUserCorrect(request.getUsername(), request.getPassword())) {
+				checkCategory(request.getCategory());
+				Main.INSTANCE.getEntriesManager().createEntry(request.getCategory(), request.getFileName(), request.getFile());
+				message = new Message("Success!", "The file " + request.getFileName() + "was uploaded successfully.", MessageType.SUCCESS);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		doGet(response, message);
+	}
+	
+	private boolean isRequestOk(UploadRequest request) {
+		return 
+			request != null && 
+			request.getUsername() != null && 
+			request.getPassword() != null && 
+			request.getFileName() != null && 
+			request.getFile() != null &&
+			request.getCategory() != null;
 	}
 	
 	private void checkCategory(String category) {

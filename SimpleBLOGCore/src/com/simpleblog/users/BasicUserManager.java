@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import com.simpleblog.CoreConfig;
 import com.simpleblog.utils.Random;
@@ -33,6 +35,33 @@ public class BasicUserManager implements UserManager {
 				e.printStackTrace();
 			}
 		}
+		
+		checkUsers();
+	}
+	
+	private void checkUsers() {
+		getUsers().stream().forEach(U -> {
+			if (!PROPS.containsKey(U + ".salt")) {
+				String salt = generateSalt();
+				PROPS.put(saltKey(U), salt);
+				PROPS.put(passwordKey(U), generatePasswordHash(getPassword(U), salt));
+			}
+		});
+		try {
+			persist();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private Set<String> getUsers() {
+		Set<String> users = new HashSet<>();
+		PROPS.keySet().stream()
+			.map(K -> K.toString())
+			.forEach(K -> {
+				users.add(K.substring(0, K.lastIndexOf(".")));
+			});
+		return users;
 	}
 
 	@Override

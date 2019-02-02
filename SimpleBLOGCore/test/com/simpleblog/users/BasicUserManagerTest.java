@@ -6,9 +6,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -19,8 +21,15 @@ import com.simpleblog.utils.IOUtil;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BasicUserManagerTest {
 	
-	private static final String DIR = IOUtil.getTempFolder().getAbsolutePath() + "/users";
-	private static final String PATH = DIR + "/users.properties";
+	private static final String STRING_USERS_DIR = IOUtil.getTempFolder().getAbsolutePath() + "/users";
+	private static final String STRING_USERS_FILE = STRING_USERS_DIR + "/users.properties";
+	
+	private static final File FILE_USERS_DIR = new File(STRING_USERS_DIR);
+	private static final File FILE_USERS_FILE = new File(STRING_USERS_FILE);
+	
+	private static final String INITUSER = "inituser@gmail.com";
+	private static final String INITPASSWORD = "initpassword";
+	private static final String INITDATA = INITUSER + ".password=" + INITPASSWORD;
 	
 	private static final String UNAME = "user1@gmail.com";
 	private static final String KEY_SALT = UNAME + ".salt";
@@ -32,17 +41,27 @@ public class BasicUserManagerTest {
 	
 	@BeforeClass
 	public static void prepareProps() {
-		File targetFile = new File(DIR);
-		if (!targetFile.exists()) {
-			targetFile.mkdir();
+		if (!FILE_USERS_DIR.exists()) {
+			FILE_USERS_DIR.mkdir();
 		}
 		
-		File p = new File(PATH);
-		if (p.exists()) {
-			p.delete();
+		if (FILE_USERS_FILE.exists()) {
+			FILE_USERS_FILE.delete();
 		}
 		
-		bum = new BasicUserManager(targetFile);
+		try (FileOutputStream out = new FileOutputStream(FILE_USERS_FILE)) {
+			out.write(INITDATA.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		bum = new BasicUserManager(FILE_USERS_DIR);
+	}
+	
+	@AfterClass
+	public static void cleanup() {
+		FILE_USERS_FILE.delete();
+		FILE_USERS_DIR.delete();
 	}
 	
 	@Test
@@ -50,7 +69,7 @@ public class BasicUserManagerTest {
 		boolean ret = bum.createUser(UNAME, VAL_PSWD_1);
 		Properties props = new Properties();
 		try {
-			props.load(new FileInputStream(PATH));
+			props.load(new FileInputStream(STRING_USERS_FILE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -164,7 +183,7 @@ public class BasicUserManagerTest {
 		
 		Properties props = new Properties();
 		try {
-			props.load(new FileInputStream(PATH));
+			props.load(new FileInputStream(STRING_USERS_FILE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -177,10 +196,19 @@ public class BasicUserManagerTest {
 		assertFalse(ret);
 		
 		try {
-			props.load(new FileInputStream(PATH));
+			props.load(new FileInputStream(STRING_USERS_FILE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		assertFalse(props.containsKey(UNAME));
+	}
+	
+	@Test
+	public void test07_inituserTest() {
+		boolean ret = bum.isKnownUsername(INITUSER);
+		assertTrue(ret);
+		
+		ret = bum.isCorrectCredentials(INITUSER, INITPASSWORD);
+		assertTrue(ret);
 	}
 }

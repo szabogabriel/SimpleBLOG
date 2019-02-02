@@ -59,7 +59,9 @@ public class Upload extends PageBase {
 		
 		String toReturn = TEMPLATE.render(data);
 		response.setContentType("text/html");
+		response.sendResponse(200, toReturn.length());
 		response.getOutputStream().write(toReturn.getBytes());
+		response.getOutputStream().close();
 	}
 	
 	public void doPost(UploadRequest request, Response response) throws IOException {

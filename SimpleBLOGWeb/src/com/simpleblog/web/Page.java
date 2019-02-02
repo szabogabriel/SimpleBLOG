@@ -49,11 +49,16 @@ public class Page extends PageBase {
 		}
 		
 		if (useTemplate) {
+			String respData = TEMPLATE.render(data);
 			response.setContentType("text/html");
-			response.getOutputStream().write(TEMPLATE.render(data).getBytes());
+			response.sendResponse(200, respData.length());
+			response.getOutputStream().write(respData.getBytes());
+			response.getOutputStream().close();
 		} else {
 			response.setContentType(renderData.getMimeType());
+			response.sendResponse(200, content.length);
 			response.getOutputStream().write(content);
+			response.getOutputStream().close();
 		}
 	}
 	

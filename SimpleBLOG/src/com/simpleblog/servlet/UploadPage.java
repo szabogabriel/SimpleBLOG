@@ -43,6 +43,12 @@ public class UploadPage extends HttpServlet {
 				}
 				return null;
 			}
+			
+			@Override
+			public void sendResponse(int code, long length) {
+				response.setStatus(code);
+				response.setContentLength((int)length);
+			}
 		});
 	}
 	
@@ -73,6 +79,12 @@ public class UploadPage extends HttpServlet {
 					e.printStackTrace();
 				}
 				return null;
+			}
+			
+			@Override
+			public void sendResponse(int code, long length) {
+				response.setStatus(code);
+				response.setContentLength((int)length);
 			}
 		});
 	}

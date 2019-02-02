@@ -6,5 +6,6 @@ public interface Response {
 	
 	void setContentType(String type);
 	OutputStream getOutputStream();
+	void sendResponse(int code, long length);
 
 }

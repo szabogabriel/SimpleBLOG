@@ -1,26 +1,28 @@
 package com.simpleblog.minihttp;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-import com.simpleblog.minihttp.upload.ApacheCommonsUploadHandler;
+import com.simpleblog.minihttp.handlers.page.PageHandler;
+import com.simpleblog.minihttp.handlers.upload.UploadHandlerBase;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 public class Server {
 	
 	private final String HANDLER_URL;
-	private final File TARGET_FOLDER;
 	private final HttpServer SERVER;
-	private final HttpHandler HANDLER;
+	private final HttpHandler HANDLER_PAGE;
+	private final HttpHandler HANDLER_UPLOAD;
 	
-	public Server(int port, File targetDir, String prefix) throws IllegalArgumentException, IOException {
+	public Server(int port, String prefix) throws IllegalArgumentException, IOException {
 		HANDLER_URL = prefix;
-		TARGET_FOLDER = targetDir;
-		HANDLER = new ApacheCommonsUploadHandler(HANDLER_URL, TARGET_FOLDER);
+		HANDLER_PAGE = new PageHandler();
+		HANDLER_UPLOAD = new UploadHandlerBase();
+		
 		SERVER = HttpServer.create(new InetSocketAddress(port), 0);
-		SERVER.createContext(prefix, HANDLER);
+		SERVER.createContext(HANDLER_URL + "/page", HANDLER_PAGE);
+		SERVER.createContext(HANDLER_URL + "/upload", HANDLER_UPLOAD);
 		SERVER.setExecutor(null);
 	}
 	
@@ -30,7 +32,6 @@ public class Server {
 	
 	public static void main(String [] args) {
 		int port = -1;
-		File uploadDir = null;
 		String prefix = null;
 		for (int i = 0; i < args.length; i++) {
 			if ("-port".equals(args[i]) && i < args.length - 1) {
@@ -40,9 +41,6 @@ public class Server {
 					e.printStackTrace();
 				}
 				i++;
-			}
-			if ("-dir".equals(args[i]) && i < args.length - 1) {
-				uploadDir = new File(args[++i]);
 			}
 			if ("-prefix".equals(args[i]) && i < args.length - 1) {
 				prefix = args[++i];
@@ -55,20 +53,12 @@ public class Server {
 			System.out.println("Port not set. Using default port: 65000");
 			port = 65000;
 		}
-		if (uploadDir == null) {
-			System.out.println("Upload dir not set. Using default: ./upload");
-			uploadDir = new File("./upload");
-		}
-		if (!uploadDir.exists()) {
-			System.out.println("Upload dir doesn't exist. Creating it. " + uploadDir.getAbsolutePath());
-			uploadDir.mkdirs();
-		}
 		if (prefix == null) {
-			System.out.println("Prefix not set. Using default: /upload");
-			prefix = "/upload";
+			System.out.println("Prefix not set. Using default: /SimpleBLOG");
+			prefix = "/SimpleBLOG";
 		}
 		try {
-			new Server(port, uploadDir, prefix).run();
+			new Server(port, prefix).run();
 		} catch (IllegalArgumentException | IOException e) {
 			System.out.println("Error when executing the service.");
 			e.printStackTrace();
@@ -77,12 +67,11 @@ public class Server {
 	
 	private static void printHelp() {
 		System.out.println(
-				  "This is a fairly simple web application responsible for uploads."
+				  "This is a fairly simple web blog application."
 				+ "The configuration is as follows:"
-				+ "       -port [portNumber]    - sets the listen port (default 65000)"
-				+ "       -prefix [URL]         - sets the URL prefix (default /upload)"
-				+ "       -dir [targetDir]      - sets the target dir (defualt ./upload)"
-				+ "       -help                 - print this help"
+				+ "     -port [portNumber]    - sets the listen port (default 65000)"
+				+ "     -prefix [URL]         - sets the URL prefix (default /SimpleBLOG)"
+				+ "     -help                 - print this help"
 				);
 		System.exit(0);	
 	}

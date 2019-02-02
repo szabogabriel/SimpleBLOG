@@ -36,6 +36,12 @@ public class ServletPage extends HttpServlet {
 				}
 				return null;
 			}
+
+			@Override
+			public void sendResponse(int code, long length) {
+				response.setStatus(code);
+				response.setContentLength((int)length);
+			}
 		});
 	}
 }

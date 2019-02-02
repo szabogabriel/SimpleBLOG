@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -17,6 +17,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import com.simpleblog.utils.IOUtil;
 import com.simpleblog.web.Response;
 import com.simpleblog.web.Upload;
+import com.simpleblog.web.UploadRequest;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -59,60 +60,48 @@ public class UploadHandlerBase implements HttpHandler {
 	}
 	
 	public void handlePost(HttpExchange exchange) throws IOException {
-		for (Entry<String, List<String>> header : exchange.getRequestHeaders().entrySet()) {
-			System.out.println(header.getKey() + ": " + header.getValue().get(0));
-		}
-		DiskFileItemFactory d = new DiskFileItemFactory();
-
+		String uname = null;
+		String psswd = null;
+		String categoryNew = null;
+		String categoryOld = null;
+		String fileName = null;
+		File file = null;
+		
 		try {
-			ServletFileUpload up = new ServletFileUpload(d);
-			List<FileItem> result = up.parseRequest(new RequestContext() {
-
-				@Override
-				public String getCharacterEncoding() {
-					return "UTF-8";
-				}
-
-				@Override
-				public int getContentLength() {
-					return 0; // tested to work with 0 as return
-				}
-
-				@Override
-				public String getContentType() {
-					return exchange.getRequestHeaders().getFirst("Content-type");
-				}
-
-				@Override
-				public InputStream getInputStream() throws IOException {
-					return exchange.getRequestBody();
-				}
-
-			});
+			List<FileItem> result = createPostMessageItems(exchange);
 			
-			exchange.getResponseHeaders().add("Content-type", "text/plain");
-			exchange.sendResponseHeaders(200, 0);
-			OutputStream os = exchange.getResponseBody();
 			for (FileItem fi : result) {
-				os.write(fi.getName().getBytes());
-				os.write("\r\n".getBytes());
-				System.out.println("File-Item: " + fi.getFieldName() + " = " + fi.getName());
-				File targetFile = new File(IOUtil.getTempFolder().getAbsolutePath() + "/" + fi.getName());
-				try (FileOutputStream out = new FileOutputStream(targetFile)) {
-					System.out.println("Creating file: " + targetFile.getAbsolutePath());
-					out.write(fi.get());
-				} catch (Exception e) {
-					e.printStackTrace();
+				String fieldName = fi.getFieldName();
+				
+				if ("username".equals(fieldName)) {
+					uname = new String(fi.get());
+				} else
+				if ("password".equals(fieldName)) {
+					psswd = new String(fi.get());
+				} else
+				if ("categoryNew".equals(fieldName)) {
+					categoryNew = new String(fi.get());
+				} else
+				if ("categoryExisting".equals(fieldName)) {
+					categoryOld = new String(fi.get());
+				} else
+				if ("file".equals(fieldName)) {
+					fileName = fi.getName();
+					file = new File(IOUtil.getTempFolder().getAbsolutePath() + "/" + fi.getName());
+					try (FileOutputStream out = new FileOutputStream(file)) {
+						System.out.println("Creating file: " + file.getAbsolutePath());
+						out.write(fi.get());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
-			os.close();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-//		UploadRequest request = new UploadRequest(uname, psswd, selectedCategory, targetFile, fileName)
-		upload.doPost(null, new Response() {
+		UploadRequest request = new UploadRequest(uname, psswd, getCategory(categoryNew, categoryOld), file, fileName);
+		upload.doPost(request, new Response() {
 
 			@Override
 			public OutputStream getOutputStream() {
@@ -133,6 +122,43 @@ public class UploadHandlerBase implements HttpHandler {
 				}				
 			}
 		});
+	}
+	
+	private String getCategory(String newCategory, String oldCategory) {
+		String ret = null;
+		
+		if (oldCategory != null && oldCategory.length() > 0) {
+			ret = oldCategory;
+		} else
+		if (newCategory != null && newCategory.length() > 0) {
+			ret = newCategory;
+		}
+		
+		return ret;
+	}
+	
+	private List<FileItem> createPostMessageItems(HttpExchange exchange) throws FileUploadException {
+		DiskFileItemFactory d = new DiskFileItemFactory();
+		ServletFileUpload up = new ServletFileUpload(d);
+		List<FileItem> result = up.parseRequest(new RequestContext() {
+			@Override
+			public String getCharacterEncoding() {
+				return "UTF-8";
+			}
+			@Override
+			public int getContentLength() {
+				return 0; // tested to work with 0 as return
+			}
+			@Override
+			public String getContentType() {
+				return exchange.getRequestHeaders().getFirst("Content-type");
+			}
+			@Override
+			public InputStream getInputStream() throws IOException {
+				return exchange.getRequestBody();
+			}
+		});
+		return result;
 	}
 
 }

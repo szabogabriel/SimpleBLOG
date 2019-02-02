@@ -123,6 +123,13 @@ public class Upload extends PageBase {
 	private boolean isUserCorrect(String uname, String psswd) {
 		boolean ret = false;
 		
+		try {
+			ret = Main.INSTANCE.getUserManager().isCorrectCredentials(uname, psswd);
+		} catch (Exception e) {
+			e.printStackTrace();
+			ret = false;
+		}
+		
 		return ret;
 	}
 

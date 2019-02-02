@@ -1,6 +1,7 @@
 package com.simpleblog.servlet;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import com.simpleblog.utils.IOUtil;
 import com.simpleblog.web.Response;
 import com.simpleblog.web.Upload;
 import com.simpleblog.web.UploadRequest;
@@ -60,7 +62,7 @@ public class UploadPage extends HttpServlet {
 	    
 		Part filePart = request.getPart("file");
 	    String fileName = getSubmittedFileName(filePart);
-	    File temporaryFile = getFile(filePart.getInputStream());
+	    File temporaryFile = getFile(fileName, filePart.getInputStream());
 	    
 	    UploadRequest uploadRequest = new UploadRequest(username, password, category, temporaryFile, fileName);
 	    
@@ -111,7 +113,19 @@ public class UploadPage extends HttpServlet {
 	    return null;
 	}
 
-	private File getFile(InputStream in) {
-		return null;
+	private File getFile(String fileName, InputStream in) {
+		File targetFile = new File(IOUtil.getTempFolder().getAbsolutePath() + "/" + fileName);
+		try (FileOutputStream out = new FileOutputStream(targetFile)){
+			 byte [] buffer = new byte [1024 * 1024];
+			 int read;
+			 
+			 while ((read = in.read(buffer)) != -1) {
+				 out.write(buffer, 0, read);
+			 }
+		} catch (Exception e) {
+			e.printStackTrace();
+			targetFile = null;
+		}
+		return targetFile;
 	}
 }

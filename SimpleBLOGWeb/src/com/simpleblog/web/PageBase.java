@@ -30,9 +30,20 @@ public abstract class PageBase {
 	}
 
 	protected List<Map<String, Object>> getCategories() {
+		return getCategories(false);
+	}
+	
+	protected List<Map<String, Object>> getCategories(boolean startWithEmpty) {
 		String[] categories = Main.INSTANCE.getEntriesManager().getEntryCategories();
 		List<Map<String, Object>> ret = new ArrayList<>();
 
+		if (startWithEmpty) {
+			String [] tmp = new String[categories.length + 1];
+			tmp[0] = "";
+			System.arraycopy(categories, 0, tmp, 1, categories.length);
+			categories = tmp;
+		}
+		
 		for (String it : categories) {
 			Map<String, Object> tmp = new HashMap<>();
 			tmp.put("category", it);

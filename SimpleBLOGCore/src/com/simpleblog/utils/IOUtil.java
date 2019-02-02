@@ -41,5 +41,9 @@ public class IOUtil {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public static File getTempFolder() {
+		File ret = new File(System.getProperty("java.io.tmpdir"));
+		return ret;
+	}
 }

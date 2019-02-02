@@ -7,13 +7,16 @@ import com.simpleblog.entries.EntriesManager;
 import com.simpleblog.entries.Entry;
 import com.simpleblog.renderer.EntryRenderer;
 import com.simpleblog.renderer.RenderedData;
+import com.simpleblog.users.UserManager;
 
 public class Main {
 	
 	public static final Main INSTANCE = new Main();
 	
+	private UserManager userManager = UserManager.Factory.INSTANCE.getUserManager();
 	private EntriesManager entriesLoader;
 	private EntryRenderer entriesRenderer;
+	
 	
 	private Main() {
 		entriesLoader = new EntriesManager(new File(CoreConfig.DIR_ENTRIES.toString()));
@@ -26,6 +29,10 @@ public class Main {
 	
 	public EntryRenderer getEntriesRenderer() {
 		return entriesRenderer;
+	}
+	
+	public UserManager getUserManager() {
+		return userManager;
 	}
 
 	public RenderedData getRenderedEntry(String category, String name) {

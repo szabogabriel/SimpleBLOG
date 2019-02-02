@@ -21,8 +21,9 @@ public class UploadPage extends HttpServlet {
 	
 	private Upload upload = new Upload();
 	
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		upload.doGet(request.getQueryString(), new Response() {
+		upload.doGet(new Response() {
 
 			@Override
 			public void setContentType(String type) {
@@ -39,6 +40,12 @@ public class UploadPage extends HttpServlet {
 				return null;
 			}
 		});
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+//		upload.doPost(request, response);
 	}
 
 }

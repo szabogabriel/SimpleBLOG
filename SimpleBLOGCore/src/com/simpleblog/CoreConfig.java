@@ -11,6 +11,7 @@ public enum CoreConfig {
 	DIR_TOOLS("dir.tools", "/tools"),
 	DIR_LOGS("dir.logs", "/logs"),
 	DIR_USERS("dir.users", "/users"),
+	USER_MANAGER("manager.user", "com.simpleblog.users.BasicUserManager"),
 	;
 	
 	private static final Properties PROPS = new Properties();

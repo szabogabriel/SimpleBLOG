@@ -2,7 +2,6 @@
 package com.simpleblog.minihttp.handlers.upload;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -88,12 +87,7 @@ public class UploadHandlerBase implements HttpHandler {
 				if ("file".equals(fieldName)) {
 					fileName = fi.getName();
 					file = new File(IOUtil.getTempFolder().getAbsolutePath() + "/" + fi.getName());
-					try (FileOutputStream out = new FileOutputStream(file)) {
-						System.out.println("Creating file: " + file.getAbsolutePath());
-						out.write(fi.get());
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					fi.write(file);
 				}
 			}
 		} catch (Exception e) {

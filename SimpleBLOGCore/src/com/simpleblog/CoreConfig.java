@@ -7,6 +7,7 @@ import java.util.Properties;
 public enum CoreConfig {
 	
 	COMMAND_PERL("command.perl", "perl"),
+	BUFFER_SIZE("size.buffer", "8096"),
 	DIR_ENTRIES("dir.entries", "/entries"),
 	DIR_TOOLS("dir.tools", "/tools"),
 	DIR_LOGS("dir.logs", "/logs"),

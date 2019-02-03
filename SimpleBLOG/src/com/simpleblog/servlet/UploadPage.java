@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import com.simpleblog.CoreConfig;
 import com.simpleblog.utils.IOUtil;
 import com.simpleblog.web.Response;
 import com.simpleblog.web.Upload;
@@ -116,7 +117,7 @@ public class UploadPage extends HttpServlet {
 	private File getFile(String fileName, InputStream in) {
 		File targetFile = new File(IOUtil.getTempFolder().getAbsolutePath() + "/" + fileName);
 		try (FileOutputStream out = new FileOutputStream(targetFile)){
-			 byte [] buffer = new byte [1024 * 1024];
+			 byte [] buffer = new byte [Integer.parseInt(CoreConfig.BUFFER_SIZE.toString())];
 			 int read;
 			 
 			 while ((read = in.read(buffer)) != -1) {

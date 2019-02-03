@@ -7,20 +7,20 @@ import com.sun.net.httpserver.HttpHandler;
 
 public class RootHandler implements HttpHandler {
 	
-	private final String URL_PREFIX;
+	private final String RESPONSE;
 	
-	private final String RESPONSE = "<html><head><meta http-equiv=\"refresh\" content=\"0; url=###\" /></head><body/></html>";
+	private final String RESPONSE1 = "<html><head><meta http-equiv=\"refresh\" content=\"0; url=";
+	private final String RESPONSE2 = "\" /></head><body/></html>";
 	
 	public RootHandler(String urlPrefix) {
-		URL_PREFIX = urlPrefix;
+		RESPONSE = RESPONSE1 + urlPrefix + "/page" + RESPONSE2;
 	}
 
 	@Override
 	public void handle(HttpExchange arg0) throws IOException {
-		String renderedResponse = RESPONSE.replaceAll("###", URL_PREFIX + "/page");
-		arg0.sendResponseHeaders(200, renderedResponse.length());
+		arg0.sendResponseHeaders(200, RESPONSE.length());
 		arg0.getResponseHeaders().set("Content-Type", "text/html");
-		arg0.getResponseBody().write(renderedResponse.getBytes());
+		arg0.getResponseBody().write(RESPONSE.getBytes());
 		arg0.getResponseBody().close();
 	}
 

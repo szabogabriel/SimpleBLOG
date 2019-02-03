@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import com.simpleblog.minihttp.handlers.page.PageHandler;
-import com.simpleblog.minihttp.handlers.upload.UploadHandlerBase;
+import com.simpleblog.minihttp.handlers.root.RootHandler;
+import com.simpleblog.minihttp.handlers.upload.UploadHandler;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
@@ -12,17 +13,20 @@ public class Server {
 	
 	private final String HANDLER_URL;
 	private final HttpServer SERVER;
+	private final HttpHandler HANDLER_ROOT;
 	private final HttpHandler HANDLER_PAGE;
 	private final HttpHandler HANDLER_UPLOAD;
 	
 	public Server(int port, String prefix) throws IllegalArgumentException, IOException {
 		HANDLER_URL = prefix;
+		HANDLER_ROOT = new RootHandler(HANDLER_URL);
 		HANDLER_PAGE = new PageHandler();
-		HANDLER_UPLOAD = new UploadHandlerBase();
+		HANDLER_UPLOAD = new UploadHandler();
 		
 		SERVER = HttpServer.create(new InetSocketAddress(port), 0);
 		SERVER.createContext(HANDLER_URL + "/page", HANDLER_PAGE);
 		SERVER.createContext(HANDLER_URL + "/upload", HANDLER_UPLOAD);
+		SERVER.createContext(HANDLER_URL, HANDLER_ROOT);
 		SERVER.setExecutor(null);
 	}
 	

@@ -20,7 +20,7 @@ import com.simpleblog.web.UploadRequest;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-public class UploadHandlerBase implements HttpHandler {
+public class UploadHandler implements HttpHandler {
 	
 	private Upload upload = new Upload();
 	

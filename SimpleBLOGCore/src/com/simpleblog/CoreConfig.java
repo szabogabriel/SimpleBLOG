@@ -10,6 +10,7 @@ public enum CoreConfig {
 	DIR_ENTRIES("dir.entries", "/entries"),
 	DIR_TOOLS("dir.tools", "/tools"),
 	DIR_LOGS("dir.logs", "/logs"),
+	DIR_IMAGES("dir.images", "/images"),
 	DIR_USERS("dir.users", "/users"),
 	USER_MANAGER("manager.user", "com.simpleblog.users.BasicUserManager"),
 	;
@@ -35,6 +36,7 @@ public enum CoreConfig {
 			PROPS.put(DIR_TOOLS.KEY, wd + DIR_TOOLS.DEFAULT);
 			PROPS.put(DIR_LOGS.KEY, wd + DIR_LOGS.DEFAULT);
 			PROPS.put(DIR_USERS.KEY, wd + DIR_USERS.DEFAULT);
+			PROPS.put(DIR_IMAGES.KEY, wd + DIR_IMAGES.DEFAULT);
 		}
 	}
 	

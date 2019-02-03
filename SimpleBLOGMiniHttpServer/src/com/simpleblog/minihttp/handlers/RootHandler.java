@@ -1,4 +1,4 @@
-package com.simpleblog.minihttp.handlers.root;
+package com.simpleblog.minihttp.handlers;
 
 import java.io.IOException;
 

@@ -1,5 +1,5 @@
 
-package com.simpleblog.minihttp.handlers.upload;
+package com.simpleblog.minihttp.handlers;
 
 import java.io.File;
 import java.io.IOException;

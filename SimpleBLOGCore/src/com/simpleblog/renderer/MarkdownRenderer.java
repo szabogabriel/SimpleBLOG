@@ -22,7 +22,7 @@ public class MarkdownRenderer implements FileRenderer {
 	}
 
 	@Override
-	public RenderedData render(Entry entry) {
+	public RenderableData render(Entry entry) {
 		StringBuilder command = new StringBuilder();
 		command
 			.append(COMMAND_PERL)
@@ -50,9 +50,7 @@ public class MarkdownRenderer implements FileRenderer {
 			e.printStackTrace();
 		}
 		
-		System.out.println(ret.toString());
-		
-		return new RenderedData(ret.toString().getBytes(), "text/html");
+		return new RenderableData(ret.toString(), "text/html", true);
 	}
 
 }

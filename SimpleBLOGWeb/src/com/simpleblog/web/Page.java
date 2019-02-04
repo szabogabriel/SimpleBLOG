@@ -1,5 +1,6 @@
 package com.simpleblog.web;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.Map;
 
 import com.jmtemplate.Template;
 import com.simpleblog.Main;
-import com.simpleblog.renderer.RenderedData;
+import com.simpleblog.renderer.RenderableData;
 import com.simpleblog.utils.QueryString;
 import com.simpleblog.utils.TemplateLoader;
 
@@ -28,14 +29,14 @@ public class Page extends PageBase {
 		
 		boolean useTemplate = false;
 		
-		RenderedData renderData = getRenderedEntry(qs);
-		byte[] content = renderData.getData();
-		if (content.length > 0) {
-			useTemplate = renderData.getMimeType() != null && renderData.getMimeType().startsWith("text");
+		RenderableData renderData = getRenderedEntry(qs);
+
+		if (renderData.isNotEmpty()) {
+			useTemplate = renderData.isEmbeddable();
 			if (useTemplate) {
-				data.put("content", new String(content));
-			} else {
-				data.put("content", content);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				renderData.writeData(baos);
+				data.put("content", baos.toString());
 			}
 		} else {
 			useTemplate = true;
@@ -56,8 +57,8 @@ public class Page extends PageBase {
 			response.getOutputStream().close();
 		} else {
 			response.setContentType(renderData.getMimeType());
-			response.sendResponse(200, content.length);
-			response.getOutputStream().write(content);
+			response.sendResponse(200, renderData.getDataLength());
+			renderData.writeData(response.getOutputStream());
 			response.getOutputStream().close();
 		}
 	}

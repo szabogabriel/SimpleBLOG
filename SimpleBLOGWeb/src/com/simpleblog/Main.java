@@ -6,7 +6,7 @@ import java.util.Arrays;
 import com.simpleblog.entries.EntriesManager;
 import com.simpleblog.entries.Entry;
 import com.simpleblog.renderer.EntryRenderer;
-import com.simpleblog.renderer.RenderedData;
+import com.simpleblog.renderer.RenderableData;
 import com.simpleblog.users.UserManager;
 
 public class Main {
@@ -35,8 +35,8 @@ public class Main {
 		return userManager;
 	}
 
-	public RenderedData getRenderedEntry(String category, String name) {
-		RenderedData ret = new RenderedData(new byte [] {}, "application/octet-stream");
+	public RenderableData getRenderedEntry(String category, String name) {
+		RenderableData ret = new RenderableData("", "application/octet-stream", false);
 		File entry = Arrays.asList(entriesLoader.getEntries(category)).stream().filter(e -> e.getName().startsWith(name)).findAny().orElse(null);
 		
 		if (entry != null) {

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.simpleblog.Main;
-import com.simpleblog.renderer.RenderedData;
+import com.simpleblog.renderer.RenderableData;
 import com.simpleblog.utils.QueryString;
 
 public abstract class PageBase {
@@ -66,8 +66,8 @@ public abstract class PageBase {
 		return ret;
 	}
 
-	protected RenderedData getRenderedEntry(QueryString qs) {
-		RenderedData ret = new RenderedData(new byte[] {}, "text/html");
+	protected RenderableData getRenderedEntry(QueryString qs) {
+		RenderableData ret = new RenderableData("", "text/html", false);
 		if (qs.containsKey("category") && qs.containsKey("name")) {
 			ret = Main.INSTANCE.getRenderedEntry(qs.getValue("category"), qs.getValue("name"));
 		}

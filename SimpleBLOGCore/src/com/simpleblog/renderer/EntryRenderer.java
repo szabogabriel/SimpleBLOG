@@ -19,12 +19,12 @@ public class EntryRenderer {
 		RENDERERS.put(EntryTypes.UNKNOWN, new UnknownRenderer());
 	}
 	
-	public RenderedData render(Entry entry) {
-		RenderedData ret = null;
+	public RenderableData render(Entry entry) {
+		RenderableData ret = null;
 		if (RENDERERS.containsKey(entry.getType())) {
 			ret = RENDERERS.get(entry.getType()).render(entry);
 		} else {
-			ret = new RenderedData(entry.getContent().getBytes(), "application/octet-stream");
+			ret = new RenderableData(entry);
 		}
 		return ret;
 	}

@@ -5,8 +5,8 @@ import com.simpleblog.entries.Entry;
 public class UnknownRenderer implements FileRenderer {
 
 	@Override
-	public RenderedData render(Entry entry) {
-		return new RenderedData(entry.getContent().getBytes(), "application/octet-stream");
+	public RenderableData render(Entry entry) {
+		return new RenderableData(entry);
 	}
 
 }

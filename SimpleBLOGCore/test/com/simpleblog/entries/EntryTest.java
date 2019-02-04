@@ -1,7 +1,9 @@
 package com.simpleblog.entries;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import org.junit.Test;
@@ -22,7 +24,9 @@ public class EntryTest {
 	@Test
 	public void render() {
 		MarkdownRenderer mdr = new MarkdownRenderer(new File("./resources/tools/Markdown.pl"), "perl");
-		String file = new String(mdr.render(testEntry).getData());
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		mdr.render(testEntry).writeData(baos);
+		String file = baos.toString();
 		System.out.println(file);
 		assertTrue(file.startsWith("<h1>"));
 		assertTrue(file.trim().endsWith("</p>"));

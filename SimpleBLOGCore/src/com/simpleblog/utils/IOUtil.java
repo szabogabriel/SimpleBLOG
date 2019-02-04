@@ -65,4 +65,23 @@ public class IOUtil {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void sendStringToStream(String content, OutputStream out) {
+		try {
+			out.write(content.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static String getMimeType(File file) {
+		String ret;
+		try {
+			ret = Files.probeContentType(file.toPath());
+		} catch (Exception e) {
+			e.printStackTrace();
+			ret = "application/octet-stream";
+		}
+		return ret;
+	}
 }

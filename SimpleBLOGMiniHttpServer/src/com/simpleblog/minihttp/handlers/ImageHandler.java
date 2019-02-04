@@ -2,7 +2,6 @@ package com.simpleblog.minihttp.handlers;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
 import com.simpleblog.CoreConfig;
 import com.simpleblog.utils.IOUtil;
@@ -30,7 +29,7 @@ public class ImageHandler implements HttpHandler {
 	
 	private void sendFile(HttpExchange arg0, File image) throws IOException {
 		arg0.sendResponseHeaders(200, image.length());
-		arg0.getResponseHeaders().set("Content-Type", getMimeType(image));
+		arg0.getResponseHeaders().set("Content-Type", IOUtil.getMimeType(image));
 		IOUtil.sendFileToStream(image, arg0.getResponseBody());
 		arg0.getResponseBody().close();
 	}
@@ -49,8 +48,4 @@ public class ImageHandler implements HttpHandler {
 		return ret;
 	}
 	
-	private String getMimeType(File file) throws IOException {
-		return Files.probeContentType(file.toPath());
-	}
-
 }

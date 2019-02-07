@@ -45,13 +45,13 @@ public class BasicUserManager implements UserManager {
 				String salt = generateSalt();
 				PROPS.put(saltKey(U), salt);
 				PROPS.put(passwordKey(U), generatePasswordHash(getPassword(U), salt));
+				try {
+					persist();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		});
-		try {
-			persist();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	private Set<String> getUsers() {

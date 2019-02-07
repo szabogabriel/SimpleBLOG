@@ -1,6 +1,7 @@
 package com.simpleblog.minihttp;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 import com.simpleblog.minihttp.handlers.ImageHandler;
@@ -74,7 +75,7 @@ public class Server {
 			host = "localhost";
 		}
 		try {
-			new Server(new InetSocketAddress(host, port), prefix).run();
+			new Server(new InetSocketAddress(InetAddress.getByName(host), port), prefix).run();
 		} catch (IllegalArgumentException | IOException e) {
 			System.out.println("Error when executing the service.");
 			e.printStackTrace();

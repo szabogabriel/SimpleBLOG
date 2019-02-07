@@ -19,14 +19,14 @@ public class Server {
 	private final HttpHandler HANDLER_UPLOAD;
 	private final HttpHandler HANDLER_IMAGE;
 	
-	public Server(int port, String prefix) throws IllegalArgumentException, IOException {
+	public Server(InetSocketAddress addr, String prefix) throws IllegalArgumentException, IOException {
 		HANDLER_URL = prefix;
 		HANDLER_ROOT = new RootHandler(HANDLER_URL);
 		HANDLER_IMAGE = new ImageHandler(HANDLER_URL + "/image");
 		HANDLER_PAGE = new PageHandler();
 		HANDLER_UPLOAD = new UploadHandler();
 		
-		SERVER = HttpServer.create(new InetSocketAddress(port), 0);
+		SERVER = HttpServer.create(addr, 0);
 		SERVER.createContext(HANDLER_URL + "/page", HANDLER_PAGE);
 		SERVER.createContext(HANDLER_URL + "/upload", HANDLER_UPLOAD);
 		SERVER.createContext(HANDLER_URL + "/image", HANDLER_IMAGE);
@@ -39,6 +39,7 @@ public class Server {
 	}
 	
 	public static void main(String [] args) {
+		String host = null;
 		int port = -1;
 		String prefix = null;
 		for (int i = 0; i < args.length; i++) {
@@ -56,6 +57,9 @@ public class Server {
 			if ("-help".equals(args[i])) {
 				printHelp();
 			}
+			if ("-host".equals(args[i]) && i < args.length - 1) {
+				host = args[++i];
+			}
 		}
 		if (port == -1) {
 			System.out.println("Port not set. Using default port: 65000");
@@ -65,8 +69,12 @@ public class Server {
 			System.out.println("Prefix not set. Using default: /SimpleBLOG");
 			prefix = "/SimpleBLOG";
 		}
+		if (host == null) {
+			System.out.println("Host not set. Using default: localhost");
+			host = "localhost";
+		}
 		try {
-			new Server(port, prefix).run();
+			new Server(new InetSocketAddress(host, port), prefix).run();
 		} catch (IllegalArgumentException | IOException e) {
 			System.out.println("Error when executing the service.");
 			e.printStackTrace();

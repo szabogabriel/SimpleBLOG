@@ -3,8 +3,8 @@ package com.simpleblog.minihttp.handlers;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.simpleblog.web.Page;
 import com.simpleblog.web.Response;
+import com.simpleblog.web.page.Page;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 

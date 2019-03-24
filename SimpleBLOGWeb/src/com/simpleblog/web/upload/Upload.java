@@ -1,4 +1,4 @@
-package com.simpleblog.web;
+package com.simpleblog.web.upload;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -7,41 +7,17 @@ import java.util.Map;
 
 import com.jmtemplate.Template;
 import com.simpleblog.Main;
+import com.simpleblog.utils.InputUtils;
 import com.simpleblog.utils.QueryString;
 import com.simpleblog.utils.TemplateLoader;
+import com.simpleblog.web.AbstractPage;
+import com.simpleblog.web.Message;
+import com.simpleblog.web.MessageType;
+import com.simpleblog.web.Response;
 
-public class Upload extends PageBase {
+public class Upload extends AbstractPage {
 	
 	private static final Template TEMPLATE = TemplateLoader.INSTANCE.load("upload.template");
-	
-	private static class Message {
-		public static final Message NULL_OBJECT = new Message("", "", MessageType.NONE);
-		
-		private String header;
-		private String message;
-		private MessageType type;
-		public Message(String header, String message, MessageType type) {
-			this.header = header;
-			this.message = message;
-			this.type = type;
-		}
-		public String getHeader() {
-			return header;
-		}
-		
-		public String getMessage() {
-			return message;
-		}
-		public MessageType getType() {
-			return type;
-		}
-	}
-	private enum MessageType {
-		NONE,
-		SUCCESS,
-		ERROR,
-		;
-	}
 	
 	public void doGet(Response response) throws IOException {
 		doGet(response, Message.NULL_OBJECT);
@@ -53,8 +29,8 @@ public class Upload extends PageBase {
 		data.put("entries", getMenuEntries(new QueryString("")));
 		data.put("existingCategories", getCategoriesData());
 		
-		if (message.type != MessageType.NONE) {
-			data.put(getMessageTypeKey(message), getMessageData(message));
+		if (message.getType() != MessageType.NONE) {
+			data.put(message.getType().getKey(), message.getRenderableData());
 		}
 		
 		String toReturn = TEMPLATE.render(data);
@@ -102,29 +78,14 @@ public class Upload extends PageBase {
 		return ret;
 	}
 	
-	private String getMessageTypeKey(Message message) {
-		String ret;
-		switch (message.getType()) {
-		case ERROR: ret = "messages_error"; break;
-		case NONE: ret = ""; break;
-		case SUCCESS: ret = "messages_success"; break;
-		default: ret = ""; break;
-		}
-		return ret;
-	}
-	
-	private Map<String, Object> getMessageData(Message m) {
-		Map<String, Object> ret = new HashMap<>();
-		ret.put("message_title", m.getHeader());
-		ret.put("message_body", m.getMessage());
-		return ret;
-	}
-	
 	private boolean isUserCorrect(String uname, String psswd) {
 		boolean ret = false;
 		
 		try {
-			ret = Main.INSTANCE.getUserManager().isCorrectCredentials(uname, psswd);
+			ret = 
+					InputUtils.isValidEmail(uname) &&
+					InputUtils.isValidPassword(psswd) &&
+					Main.INSTANCE.getUserManager().isCorrectCredentials(uname, psswd);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ret = false;

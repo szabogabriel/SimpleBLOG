@@ -12,7 +12,7 @@ import com.simpleblog.renderer.MarkdownRenderer;
 
 public class EntryTest {
 	
-	private static File testFile = new File("resources/entries/Bash/History.md");
+	private static File testFile = new File("../SimpleBLOGWorkingDirectory/resources/entries/Bash/History.md");
 	private static Entry testEntry = new Entry(testFile);
 	
 	@Test
@@ -23,7 +23,7 @@ public class EntryTest {
 	
 	@Test
 	public void render() {
-		MarkdownRenderer mdr = new MarkdownRenderer(new File("./resources/tools/Markdown.pl"), "perl");
+		MarkdownRenderer mdr = new MarkdownRenderer(new File("../SimpleBLOGWorkingDirectory/resources/tools/Markdown.pl"), "perl");
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		mdr.render(testEntry).writeData(baos);
 		String file = baos.toString();
@@ -34,7 +34,7 @@ public class EntryTest {
 	
 	@Test
 	public void entriesLoaderTest() {
-		EntriesManager el = new EntriesManager(new File("./resources/entries"));
+		EntriesManager el = new EntriesManager(new File("../SimpleBLOGWorkingDirectory/resources/entries"));
 		String[] categories = el.getEntryCategories();
 		assertEquals(categories.length, 1);
 		assertEquals(categories[0], "Bash");

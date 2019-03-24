@@ -1,4 +1,4 @@
-package com.simpleblog.web;
+package com.simpleblog.web.upload;
 
 import java.io.File;
 

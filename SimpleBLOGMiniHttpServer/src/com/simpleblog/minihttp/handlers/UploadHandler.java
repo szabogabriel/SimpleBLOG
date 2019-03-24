@@ -15,8 +15,8 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.simpleblog.utils.IOUtil;
 import com.simpleblog.web.Response;
-import com.simpleblog.web.Upload;
-import com.simpleblog.web.UploadRequest;
+import com.simpleblog.web.upload.Upload;
+import com.simpleblog.web.upload.UploadRequest;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 

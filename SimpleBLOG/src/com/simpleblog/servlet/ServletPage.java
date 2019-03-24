@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.simpleblog.web.Page;
 import com.simpleblog.web.Response;
+import com.simpleblog.web.page.Page;
 
 @WebServlet("/page")
 public class ServletPage extends HttpServlet {

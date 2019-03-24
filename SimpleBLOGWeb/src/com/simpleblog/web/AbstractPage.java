@@ -10,7 +10,7 @@ import com.simpleblog.Main;
 import com.simpleblog.renderer.RenderableData;
 import com.simpleblog.utils.QueryString;
 
-public abstract class PageBase {
+public abstract class AbstractPage {
 
 	protected List<Map<String, Object>> getMenuEntries(QueryString qs) {
 		List<Map<String, Object>> ret = new ArrayList<>();

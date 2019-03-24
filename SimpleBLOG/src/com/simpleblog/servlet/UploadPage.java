@@ -17,8 +17,8 @@ import javax.servlet.http.Part;
 import com.simpleblog.CoreConfig;
 import com.simpleblog.utils.IOUtil;
 import com.simpleblog.web.Response;
-import com.simpleblog.web.Upload;
-import com.simpleblog.web.UploadRequest;
+import com.simpleblog.web.upload.Upload;
+import com.simpleblog.web.upload.UploadRequest;
 
 @WebServlet("/upload")
 @MultipartConfig

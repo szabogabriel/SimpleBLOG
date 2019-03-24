@@ -1,4 +1,4 @@
-package com.simpleblog.web;
+package com.simpleblog.web.page;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -13,8 +13,10 @@ import com.simpleblog.Main;
 import com.simpleblog.renderer.RenderableData;
 import com.simpleblog.utils.QueryString;
 import com.simpleblog.utils.TemplateLoader;
+import com.simpleblog.web.AbstractPage;
+import com.simpleblog.web.Response;
 
-public class Page extends PageBase {
+public class Page extends AbstractPage {
 	private static final Template TEMPLATE = TemplateLoader.INSTANCE.load("page.template");
 
     public Page() {

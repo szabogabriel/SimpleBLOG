@@ -1,6 +1,7 @@
 package com.simpleblog.web.upload;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,15 +20,19 @@ public class Upload extends AbstractPage {
 	
 	private static final Template TEMPLATE = TemplateLoader.INSTANCE.load("upload.template");
 	
-	public void doGet(Response response) throws IOException {
-		doGet(response, Message.NULL_OBJECT);
+	public void doGet(QueryString qs, Response response) throws IOException {
+		doGet(qs, response, Message.NULL_OBJECT);
 	}
 	
-	public void doGet(Response response, Message message) throws IOException {
+	public void doGet(QueryString qs, Response response, Message message) throws IOException {
 		Map<String, Object> data = new HashMap<>();
 		
+		String locale = getLocale(qs);
+		
 		data.put("entries", getMenuEntries(new QueryString("")));
-		data.put("existingCategories", getCategoriesData());
+		data.put("existingCategories", getCategoriesData(getLocale(qs)));
+		data.put("locales", Arrays.asList(Main.INSTANCE.getLocales().getLocaleNames()));
+		data.putAll(Main.INSTANCE.getLocales().getStrings(locale));
 		
 		if (message.getType() != MessageType.NONE) {
 			data.put(message.getType().getKey(), message.getRenderableData());
@@ -40,20 +45,20 @@ public class Upload extends AbstractPage {
 		response.getOutputStream().close();
 	}
 	
-	public void doPost(UploadRequest request, Response response) throws IOException {
+	public void doPost(QueryString qs, UploadRequest request, Response response) throws IOException {
 		Message message = new Message("Ooops!", "The file couldn't be uploaded.", MessageType.ERROR);
 		
 		try {
 			if (isRequestOk(request) && isUserCorrect(request.getUsername(), request.getPassword())) {
-				checkCategory(request.getCategory());
-				Main.INSTANCE.getEntriesManager().createEntry(request.getCategory(), request.getFileName(), request.getFile());
+				checkCategory(request.getLocale(), request.getCategory());
+				Main.INSTANCE.getEntriesManager().createEntry(request.getLocale(), request.getCategory(), request.getFileName(), request.getFile());
 				message = new Message("Success!", "The file " + request.getFileName() + "was uploaded successfully.", MessageType.SUCCESS);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		doGet(response, message);
+		doGet(qs, response, message);
 	}
 	
 	private boolean isRequestOk(UploadRequest request) {
@@ -66,14 +71,14 @@ public class Upload extends AbstractPage {
 			request.getCategory() != null;
 	}
 	
-	private void checkCategory(String category) {
-		if (!Main.INSTANCE.getEntriesManager().isKnownCategory(category)) {
-			Main.INSTANCE.getEntriesManager().createCategory(category);
+	private void checkCategory(String locale, String category) {
+		if (!Main.INSTANCE.getEntriesManager().isKnownCategory(locale, category)) {
+			Main.INSTANCE.getEntriesManager().createCategory(locale, category);
 		}
 	}
 	
-	private List<Map<String, Object>> getCategoriesData() {
-		List<Map<String, Object>> ret = getCategories(true);
+	private List<Map<String, Object>> getCategoriesData(String locale) {
+		List<Map<String, Object>> ret = getCategories(locale, true);
 		
 		return ret;
 	}

@@ -20,7 +20,7 @@ public enum WebConfig {
 		File WORKING_DIRECTORY = new File(wd);
 		
 		if (WORKING_DIRECTORY.exists() && WORKING_DIRECTORY.isDirectory()) {
-			File configFile = new File(WORKING_DIRECTORY.getAbsolutePath() + "/settings.properties");
+			File configFile = new File(WORKING_DIRECTORY.getAbsolutePath() + "/web.properties");
 			try {
 				PROPS.load(new FileInputStream(configFile));
 			} catch (Exception e) {

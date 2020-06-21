@@ -13,7 +13,9 @@ public enum CoreConfig {
 	DIR_LOGS("dir.logs", "/logs"),
 	DIR_IMAGES("dir.images", "/images"),
 	DIR_USERS("dir.users", "/users"),
+	DIR_STRINGS("dir.strings", "/strings"),
 	USER_MANAGER("manager.user", "com.simpleblog.users.BasicUserManager"),
+	LOCALE_DEFAULT("locale.default", "en"),
 	;
 	
 	private static final Properties PROPS = new Properties();
@@ -38,6 +40,7 @@ public enum CoreConfig {
 			PROPS.put(DIR_LOGS.KEY, wd + DIR_LOGS.DEFAULT);
 			PROPS.put(DIR_USERS.KEY, wd + DIR_USERS.DEFAULT);
 			PROPS.put(DIR_IMAGES.KEY, wd + DIR_IMAGES.DEFAULT);
+			PROPS.put(DIR_STRINGS.KEY, wd + DIR_STRINGS.DEFAULT);
 		}
 	}
 	

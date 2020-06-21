@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,11 @@ public class Page extends AbstractPage {
 		Map<String, Object> data = new HashMap<>();
 		QueryString qs = new QueryString(queryString);
 		
+		String locale = getLocale(qs);
+		
 		data.put("entries", getMenuEntries(qs));
+		data.put("locales", Arrays.asList(Main.INSTANCE.getLocales().getLocaleNames()));
+		data.putAll(Main.INSTANCE.getLocales().getStrings(locale));
 		
 		boolean useTemplate = false;
 		
@@ -68,7 +73,7 @@ public class Page extends AbstractPage {
 	private List<Map<String, Object>> getAvailableEntries(QueryString qs) {
 		List<Map<String, Object>> ret = new ArrayList<>();
 		
-		for (File in : Main.INSTANCE.getEntriesManager().getEntries(qs.getValue("category"))) {
+		for (File in : Main.INSTANCE.getEntriesManager().getEntries(getLocale(qs), qs.getValue("category"))) {
 			Map<String, Object> tmp = new HashMap<>();
 			tmp.put("entryFile", in.getName());
 			tmp.put("entryFileHR", in.getName().substring(0, in.getName().lastIndexOf('.')));

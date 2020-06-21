@@ -13,5 +13,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/SimpleBLOGCore"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SimpleBLOGWeb"/>
 	<classpathentry kind="lib" path="/SimpleBLOGLibs/jmtemplate.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/TOMCAT9_LIB"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

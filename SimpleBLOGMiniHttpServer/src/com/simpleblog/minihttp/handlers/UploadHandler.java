@@ -14,6 +14,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.simpleblog.utils.IOUtil;
+import com.simpleblog.utils.QueryString;
 import com.simpleblog.web.Response;
 import com.simpleblog.web.upload.Upload;
 import com.simpleblog.web.upload.UploadRequest;
@@ -23,6 +24,10 @@ import com.sun.net.httpserver.HttpHandler;
 public class UploadHandler implements HttpHandler {
 	
 	private Upload upload = new Upload();
+	
+	private QueryString createQueryString(HttpExchange arg0) {
+		return new QueryString(arg0.getRequestURI().getQuery());
+	}
 	
 	public void handle(HttpExchange arg0) throws IOException {
 		String method = arg0.getRequestMethod().toUpperCase();
@@ -35,26 +40,27 @@ public class UploadHandler implements HttpHandler {
 	}
 	
 	private void handleGet(HttpExchange exchange) throws IOException {
-		upload.doGet(new Response() {
-
-			@Override
-			public OutputStream getOutputStream() {
-				return exchange.getResponseBody();
-			}
-
-			@Override
-			public void setContentType(String arg0) {
-				exchange.getResponseHeaders().set("Content-Type", arg0);
-			}
-
-			@Override
-			public void sendResponse(int code, long length) {
-				try {
-					exchange.sendResponseHeaders(code, length);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}				
-			}
+		upload.doGet(
+			createQueryString(exchange), 
+			new Response() {
+				@Override
+				public OutputStream getOutputStream() {
+					return exchange.getResponseBody();
+				}
+	
+				@Override
+				public void setContentType(String arg0) {
+					exchange.getResponseHeaders().set("Content-Type", arg0);
+				}
+	
+				@Override
+				public void sendResponse(int code, long length) {
+					try {
+						exchange.sendResponseHeaders(code, length);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}				
+				}
 		});
 	}
 	
@@ -65,6 +71,7 @@ public class UploadHandler implements HttpHandler {
 		String categoryOld = null;
 		String fileName = null;
 		File file = null;
+		String locale = null;
 		
 		try {
 			List<FileItem> result = createPostMessageItems(exchange);
@@ -88,34 +95,37 @@ public class UploadHandler implements HttpHandler {
 					fileName = fi.getName();
 					file = new File(IOUtil.getTempFolder().getAbsolutePath() + "/" + fi.getName());
 					fi.write(file);
+				} else 
+				if ("locale".contentEquals(fieldName)) {
+					locale = new String(fi.get());
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		UploadRequest request = new UploadRequest(uname, psswd, getCategory(categoryNew, categoryOld), file, fileName);
-		upload.doPost(request, new Response() {
-
-			@Override
-			public OutputStream getOutputStream() {
-				return exchange.getResponseBody();
-			}
-
-			@Override
-			public void setContentType(String arg0) {
-				exchange.getResponseHeaders().set("Content-Type", arg0);
-			}
-
-			@Override
-			public void sendResponse(int code, long length) {
-				try {
-					exchange.sendResponseHeaders(code, length);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}				
-			}
-		});
+		UploadRequest request = new UploadRequest(uname, psswd, getCategory(categoryNew, categoryOld), file, fileName, locale);
+		upload.doPost(createQueryString(exchange), request,
+			new Response() {
+				@Override
+				public OutputStream getOutputStream() {
+					return exchange.getResponseBody();
+				}
+	
+				@Override
+				public void setContentType(String arg0) {
+					exchange.getResponseHeaders().set("Content-Type", arg0);
+				}
+	
+				@Override
+				public void sendResponse(int code, long length) {
+					try {
+						exchange.sendResponseHeaders(code, length);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}				
+				}
+			});
 	}
 	
 	private String getCategory(String newCategory, String oldCategory) {

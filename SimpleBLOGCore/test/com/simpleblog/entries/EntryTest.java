@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -12,7 +13,7 @@ import com.simpleblog.renderer.MarkdownRenderer;
 
 public class EntryTest {
 	
-	private static File testFile = new File("../SimpleBLOGWorkingDirectory/resources/entries/Bash/History.md");
+	private static File testFile = new File("../SimpleBLOGWorkingDirectory/entries/en/Test/TestEntry.md");
 	private static Entry testEntry = new Entry(testFile);
 	
 	@Test
@@ -23,7 +24,7 @@ public class EntryTest {
 	
 	@Test
 	public void render() {
-		MarkdownRenderer mdr = new MarkdownRenderer(new File("../SimpleBLOGWorkingDirectory/resources/tools/Markdown.pl"), "perl");
+		MarkdownRenderer mdr = new MarkdownRenderer(new File("../SimpleBLOGWorkingDirectory/tools/Markdown.pl"), "perl");
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		mdr.render(testEntry).writeData(baos);
 		String file = baos.toString();
@@ -34,14 +35,13 @@ public class EntryTest {
 	
 	@Test
 	public void entriesLoaderTest() {
-		EntriesManager el = new EntriesManager(new File("../SimpleBLOGWorkingDirectory/resources/entries"));
-		String[] categories = el.getEntryCategories();
+		EntriesManager el = new EntriesManager(new File("../SimpleBLOGWorkingDirectory/entries"));
+		String[] categories = el.getEntryCategories("en");
 		assertEquals(categories.length, 1);
-		assertEquals(categories[0], "Bash");
+		assertEquals(categories[0], "Test");
 		
-		File [] data = el.getEntries(categories[0]);
-		assertEquals(data.length, 1);
-		assertEquals(data[0].getName(), "History.md");
+		File [] data = el.getEntries("en", categories[0]);
+		assertTrue(Arrays.asList(data[0]).size() > 0);
 	}
 
 }

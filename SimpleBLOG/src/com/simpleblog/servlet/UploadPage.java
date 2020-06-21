@@ -16,6 +16,7 @@ import javax.servlet.http.Part;
 
 import com.simpleblog.CoreConfig;
 import com.simpleblog.utils.IOUtil;
+import com.simpleblog.utils.QueryString;
 import com.simpleblog.web.Response;
 import com.simpleblog.web.upload.Upload;
 import com.simpleblog.web.upload.UploadRequest;
@@ -30,7 +31,7 @@ public class UploadPage extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		upload.doGet(new Response() {
+		upload.doGet(new QueryString(request.getQueryString()), new Response() {
 
 			@Override
 			public void setContentType(String type) {
@@ -64,10 +65,11 @@ public class UploadPage extends HttpServlet {
 		Part filePart = request.getPart("file");
 	    String fileName = getSubmittedFileName(filePart);
 	    File temporaryFile = getFile(fileName, filePart.getInputStream());
+	    String locale = request.getParameter("locale");
 	    
-	    UploadRequest uploadRequest = new UploadRequest(username, password, category, temporaryFile, fileName);
+	    UploadRequest uploadRequest = new UploadRequest(username, password, category, temporaryFile, fileName, locale);
 	    
-		upload.doPost(uploadRequest, new Response() {
+		upload.doPost(new QueryString(request.getQueryString()), uploadRequest, new Response() {
 			
 			@Override
 			public void setContentType(String type) {

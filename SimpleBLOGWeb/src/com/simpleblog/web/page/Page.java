@@ -32,6 +32,7 @@ public class Page extends AbstractPage {
 		
 		data.put("entries", getMenuEntries(qs));
 		data.put("locales", Arrays.asList(Main.INSTANCE.getLocales().getLocaleNames()));
+		data.put("current.locale", locale);
 		data.putAll(Main.INSTANCE.getLocales().getStrings(locale));
 		
 		boolean useTemplate = false;
@@ -58,9 +59,10 @@ public class Page extends AbstractPage {
 		
 		if (useTemplate) {
 			String respData = TEMPLATE.render(data);
+			byte[] dataToBeSent = respData.getBytes();
 			response.setContentType("text/html");
-			response.sendResponse(200, respData.length());
-			response.getOutputStream().write(respData.getBytes());
+			response.sendResponse(200, dataToBeSent.length);
+			response.getOutputStream().write(dataToBeSent);
 			response.getOutputStream().close();
 		} else {
 			response.setContentType(renderData.getMimeType());

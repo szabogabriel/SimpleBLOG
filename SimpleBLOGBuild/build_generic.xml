@@ -12,8 +12,10 @@
 		<antcall target="clean"/>
 		<antcall target="buildJAR"/>
 		<antcall target="buildWAR"/>
+		<antcall target="buildZIP"/>
 		<antcall target="packageJAR"/>
 		<antcall target="packageWAR"/>
+		<antcall target="packageZIP"/>
 	</target>
 
 	<target name="clean" unless="noClean">
@@ -26,6 +28,10 @@
 	
 	<target name="buildWAR" if="isWAR">
 		<javac srcdir="${project.src}" destdir="${project.bin}" classpath="${project.lib}"/>
+	</target>
+	
+	<target name="buildZIP" if="isZIP">
+		<echo message="Have to be implemented in the zip project directly."/>
 	</target>
 	
 	<target name="packageJAR" if="isJAR">
@@ -44,6 +50,10 @@
 			<lib dir="${project.weblib}" />
 			<classes dir="${project.bin}" />
 		</war>
+	</target>
+	
+	<target name="packageZIP" if="isZIP">
+		<echo message="Have to be implemented in the zip project directly."/>
 	</target>
 	
 	<target name="manageLibrary">

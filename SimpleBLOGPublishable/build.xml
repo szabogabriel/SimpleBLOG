@@ -1,0 +1,58 @@
+<project name="SimpleBLOGPublishable" basedir="." default="start">
+	
+	<import file="../SimpleBLOGBuild/build_generic.xml" />
+	
+	<property name="project.name" value="${project.name.SimpleBLOGPublishable}"/>
+	
+	<property name="dir.lib" value="${basedir}/lib"/>
+	<property name="dir.workingDirectory" value="${basedir}/workingDirectory"/>
+	
+	<target name="start">
+		<ant antfile="../SimpleBLOGBuild/dependencies.xml" target="SimpleBLOGPublishable" inheritall="false"/>
+	</target>
+	
+	<target name="clean" unless="noClean">
+		<delete>
+			<fileset dir="${dir.lib}" includes="*.jar" />
+			<fileset dir="${dir.workingDirectory}" includes="**/*" />
+			<fileset file="${project.out}" />
+		</delete>
+	</target>
+	
+	<target name="buildZIP" if="isZIP">
+		<echo message="Going to build zip file"/>
+		<mkdir dir="${dir.workingDirectory}/entries"/>
+		<mkdir dir="${dir.workingDirectory}/images"/>
+		<mkdir dir="${dir.workingDirectory}/strings"/>
+		<mkdir dir="${dir.workingDirectory}/templates"/>
+		<copy todir="${dir.lib}">
+			<fileset file="${project.out.CommonsFileupload}"/>
+			<fileset file="${project.out.CommonsIo}"/>
+			<fileset file="${project.out.jMustache}"/>
+			<fileset file="${project.out.SimpleBLOGCore}"/>
+			<fileset file="${project.out.SimpleBLOGMiniHttpServer}"/>
+			<fileset file="${project.out.SimpleBLOGWeb}"/>
+		</copy>
+		<copy todir="${dir.workingDirectory}/strings">
+			<fileset dir="${project.dir.SimpleBLOGWorkingDirectory}/strings" includes="*" />
+		</copy>
+		<copy todir="${dir.workingDirectory}/templates">
+			<fileset dir="${project.dir.SimpleBLOGWorkingDirectory}/templates" includes="*" />
+		</copy>
+		<copy todir="${dir.workingDirectory}/tools">
+			<fileset dir="${project.dir.SimpleBLOGWorkingDirectory}/tools" includes="*" />
+		</copy>
+		<copy todir="${dir.workingDirectory}">
+			<fileset dir="${project.dir.SimpleBLOGWorkingDirectory}" includes="*.properties"/>
+		</copy>
+	</target>
+	
+	<target name="packageZIP" if="isZIP">
+		<zip destfile="${project.out.SimpleBLOGPublishable}">
+			<zipfileset dir="lib" includes="**/*" prefix="lib"/>
+			<zipfileset dir="workingDirectory" includes="**/*" prefix="workingDirectory"/>
+			<fileset dir="." includes="*.sh"/>
+		</zip>
+	</target>
+	
+</project>

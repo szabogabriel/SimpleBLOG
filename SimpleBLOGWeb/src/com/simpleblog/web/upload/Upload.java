@@ -32,6 +32,7 @@ public class Upload extends AbstractPage {
 		data.put("entries", getMenuEntries(new QueryString("")));
 		data.put("existingCategories", getCategoriesData(getLocale(qs)));
 		data.put("locales", Arrays.asList(Main.INSTANCE.getLocales().getLocaleNames()));
+		data.put("current.locale", locale);
 		data.putAll(Main.INSTANCE.getLocales().getStrings(locale));
 		
 		if (message.getType() != MessageType.NONE) {

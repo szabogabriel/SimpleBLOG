@@ -32,6 +32,9 @@
 			<condition property="isWAR">
 				<equals arg1="${project.type.@{projName}}" arg2="WAR"/>
 			</condition>
+			<condition property="isZIP">
+				<equals arg1="${project.type.@{projName}}" arg2="ZIP"/>
+			</condition>
 		</sequential>
 	</macrodef>
 	

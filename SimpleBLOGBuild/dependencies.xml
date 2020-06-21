@@ -14,6 +14,10 @@
 		<ant antfile="${project.dir.SimpleBLOGMiniHttpServer}/build.xml" target="all" dir="${project.dir.SimpleBLOGMiniHttpServer}"/>
 	</target>
 	
+	<target name="SimpleBLOGPublishable" depends="SimpleBLOGCore,SimpleBLOGWeb,SimpleBLOGMiniHttpServer,jMustache,CommonsIo,CommonsFileupload">
+		<ant antfile="${project.dir.SimpleBLOGPublishable}/build.xml" target="all" dir="${project.dir.SimpleBLOGPublishable}"/>
+	</target>
+	
 	<target name="SimpleBLOGServlet" depends="SimpleBLOGCore,SimpleBLOGWeb,jMustache">
 		<ant antfile="${project.dir.SimpleBLOGServlet}/build.xml" target="all" dir="${project.dir.SimpleBLOGServlet}"/>
 	</target>

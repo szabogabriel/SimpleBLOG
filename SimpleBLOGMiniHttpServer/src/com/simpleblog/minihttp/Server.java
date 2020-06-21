@@ -89,6 +89,7 @@ public class Server {
 				+ "     -port [portNumber]    - sets the listen port (default 65000)"
 				+ "     -prefix [URL]         - sets the URL prefix (default /SimpleBLOG)"
 				+ "     -help                 - print this help"
+				+ "     -host [hostname]      - sets the listen host (default localhost)"
 				);
 		System.exit(0);	
 	}
